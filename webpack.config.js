@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
 const config = require('./public/config')[isDev ? 'dev' : 'build'];
@@ -38,23 +39,31 @@ module.exports = {
             },
             {
                 test: /\.(le|c)ss$/,
-                use: [
-                    MiniCssExtractPlugin.loader,                           // 替换之前的 style-loader(实现抽离css单独进行打包)                       
-                    'css-loader', {                                        // style-loader 动态创建 style 标签，将 css 插入到 head 中
-                    loader: 'postcss-loader',                              // css-loader 负责处理 @import 等语句
-                    options: {                                             // postcss-loader 和 autoprefixer，自动生成浏览器兼容性前缀
-                        plugins: function () {
-                            return [                                       // less-loader 负责处理编译 .less 文件,将其转为 css
-                                require('autoprefixer')({                  // loader 的执行顺序是从右向左执行的
-                                    "overrideBrowserslist": [
-                                        ">0.25%",
-                                        "not dead"
-                                    ]
-                                })
-                            ]
+                use: [                   
+                    {                                                      // style-loader 动态创建 style 标签，将 css 插入到 head 中
+                        loader: MiniCssExtractPlugin.loader,               // 替换之前的 style-loader(实现抽离css单独进行打包)
+                        options: {
+                            hmr: isDev,
+                            reloadAll: true,
                         }
-                    }
-                }, 'less-loader'],
+                    },                       
+                    'css-loader',
+                    {                                        
+                        loader: 'postcss-loader',                              // css-loader 负责处理 @import 等语句
+                        options: {                                             // postcss-loader 和 autoprefixer，自动生成浏览器兼容性前缀
+                            plugins: function () {
+                                return [                                       // less-loader 负责处理编译 .less 文件,将其转为 css
+                                    require('autoprefixer')({                  // loader 的执行顺序是从右向左执行的
+                                        "overrideBrowserslist": [
+                                            "defaults"
+                                        ]
+                                    })
+                                ]
+                            }
+                        }
+                    }, 
+                    'less-loader'
+                ],
                 exclude: /node_modules/
             },
             {
@@ -103,8 +112,11 @@ module.exports = {
         ], {
             ignore: ['other.js']
         }),
+        // 抽离css文件单独进行打包，原先的css文件会被打入js文件中
         new MiniCssExtractPlugin({
             filename: 'css/[name].css' 
-        })
+        }),
+        // 压缩抽离出来单独打包的css文件
+        new OptimizeCssPlugin()
     ]
 }
