@@ -1,10 +1,17 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 const config = require('./public/config')[isDev ? 'dev' : 'build'];
+const path = require('path');
 
 module.exports = {
     /* 打包模式，不同模式采用了不同的内置优化 */
     mode: isDev ? 'development' : 'production',
+    entry: './src/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),                             // 必须是绝对路径
+        filename: 'bundle.[hash:6].js',                                    // 打包后的文件名
+        publicPath: '/'                                                    // 通常是CDN地址
+    },
     /* 用于在浏览器实时查看效果 */
     devServer: {
         port: '1027',                                                      // 程序运行的端口号，默认是8080
