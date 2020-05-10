@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 const config = require('./public/config')[isDev ? 'dev' : 'build'];
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     /* 打包模式，不同模式采用了不同的内置优化 */
@@ -82,6 +83,10 @@ module.exports = {
                 collapseWhitespace: false,                                  // 是否折叠空白
             },
             // hash: true                                                   // 是否加上hash，默认是false
+        }),
+        // 每次打包前清空dist目录
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns:['**/*', '!dll', '!dll/**']         // 不删除dll目录下的文件
         }),
     ]
 }
