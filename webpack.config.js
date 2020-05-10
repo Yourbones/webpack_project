@@ -45,6 +45,21 @@ module.exports = {
                 }, 'less-loader'],
                 exclude: /node_modules/
             },
+            {
+                test: /\.(png|jpg|gif|jpeg|webp|svg|eot|ttf|woff|woff2)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 10240,                                   // 资源大小小于 10K 时，将资源转换为 base64，超过 10K，将图片拷贝到 dist 目录。
+                            esModule: false,
+                            name: '[name]_[hash:6].[ext]',
+                            outputPath: 'assets'
+                        }
+                    }
+                ],
+                exclude: /node_modules/
+            },
         ]
     },
     /* 插件配置对象(配置安装的webpack插件) */
