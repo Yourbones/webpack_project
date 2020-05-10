@@ -94,9 +94,11 @@ module.exports = {
             {
                 from: 'public/js/*.js',
                 to: path.resolve(__dirname, 'dist', 'js'),
-                flatten: true,
+                flatten: true,                                               // flatten 这个参数，设置为 true，那么它只会拷贝文件，而不会把文件夹路径都拷贝上
             },
-            //还可以继续配置其它要拷贝的文件
-        ])
+            // 还可以继续配置其它要拷贝的文件
+        ], {
+            ignore: ['other.js']
+        })
     ]
 }
