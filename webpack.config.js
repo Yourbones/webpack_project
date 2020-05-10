@@ -1,6 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
+    /* 打包模式，不同模式采用了不同的内置优化 */
+    mode: isDev ? 'development' : 'production',
     /* 模块转换器配置对象(配置指定文件使用指定loader进行转换) */
     module: {
         rules: [
