@@ -1,9 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const isDev = process.env.NODE_ENV === 'development';
-const config = require('./public/config')[isDev ? 'dev' : 'build'];
-const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
+const isDev = process.env.NODE_ENV === 'development';
+const config = require('./public/config')[isDev ? 'dev' : 'build'];
 
 module.exports = {
     /* 打包模式，不同模式采用了不同的内置优化 */
@@ -37,7 +38,9 @@ module.exports = {
             },
             {
                 test: /\.(le|c)ss$/,
-                use: ['style-loader', 'css-loader', {                      // style-loader 动态创建 style 标签，将 css 插入到 head 中
+                use: [
+                    MiniCssExtractPlugin.loader,                           // 替换之前的 style-loader(实现抽离css单独进行打包)                       
+                    'css-loader', {                                        // style-loader 动态创建 style 标签，将 css 插入到 head 中
                     loader: 'postcss-loader',                              // css-loader 负责处理 @import 等语句
                     options: {                                             // postcss-loader 和 autoprefixer，自动生成浏览器兼容性前缀
                         plugins: function () {
@@ -99,6 +102,9 @@ module.exports = {
             // 还可以继续配置其它要拷贝的文件
         ], {
             ignore: ['other.js']
+        }),
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].css' 
         })
     ]
 }
