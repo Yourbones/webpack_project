@@ -3,6 +3,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const config = require('./public/config')[isDev ? 'dev' : 'build'];
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     /* 打包模式，不同模式采用了不同的内置优化 */
@@ -88,5 +89,14 @@ module.exports = {
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns:['**/*', '!dll', '!dll/**']         // 不删除dll目录下的文件
         }),
+        // 静态资源拷贝(需要做的是将 public/js 目录拷贝至 dist/js 目录)
+        new CopyWebpackPlugin([
+            {
+                from: 'public/js/*.js',
+                to: path.resolve(__dirname, 'dist', 'js'),
+                flatten: true,
+            },
+            //还可以继续配置其它要拷贝的文件
+        ])
     ]
 }
