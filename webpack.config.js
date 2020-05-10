@@ -25,7 +25,26 @@ module.exports = {
                 test: /\.jsx?$/,
                 use: ['babel-loader'],
                 exclude: /node_modules/
-            }
+            },
+            {
+                test: /\.(le|c)ss$/,
+                use: ['style-loader', 'css-loader', {                      // style-loader 动态创建 style 标签，将 css 插入到 head 中
+                    loader: 'postcss-loader',                              // css-loader 负责处理 @import 等语句
+                    options: {                                             // postcss-loader 和 autoprefixer，自动生成浏览器兼容性前缀
+                        plugins: function () {
+                            return [                                       // less-loader 负责处理编译 .less 文件,将其转为 css
+                                require('autoprefixer')({                  // loader 的执行顺序是从右向左执行的
+                                    "overrideBrowserslist": [
+                                        ">0.25%",
+                                        "not dead"
+                                    ]
+                                })
+                            ]
+                        }
+                    }
+                }, 'less-loader'],
+                exclude: /node_modules/
+            },
         ]
     },
     /* 插件配置对象(配置安装的webpack插件) */
