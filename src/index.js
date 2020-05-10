@@ -1,3 +1,4 @@
+import './index.less';
 class Father {
     constructor(name) {
         this.name = name;
