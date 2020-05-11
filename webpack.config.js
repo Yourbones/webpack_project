@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
+const Webpack = require('webpack');
 const isDev = process.env.NODE_ENV === 'development';
 const config = require('./public/config')[isDev ? 'dev' : 'build'];
 
@@ -117,6 +118,8 @@ module.exports = {
             filename: 'css/[name].css' 
         }),
         // 压缩抽离出来单独打包的css文件
-        new OptimizeCssPlugin()
+        new OptimizeCssPlugin(),
+        // 热更新插件
+        new Webpack.HotModuleReplacementPlugin()
     ]
 }
