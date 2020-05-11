@@ -13,3 +13,7 @@ class Son extends Father {
 }
 const D = new Son('Fly', 15);
 console.log('D', D);
+
+document.getElementsByTagName('button')[0].onclick = function() {
+    import('../public/js/handle.js').then(fn => fn.default());
+}
