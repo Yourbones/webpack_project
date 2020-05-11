@@ -11,10 +11,13 @@ const config = require('./public/config')[isDev ? 'dev' : 'build'];
 module.exports = {
     /* 打包模式，不同模式采用了不同的内置优化 */
     mode: isDev ? 'development' : 'production',
-    entry: './src/index.js',
+    entry: {
+        index: './src/index.js',
+        login: './src/login.js'
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),                             // 必须是绝对路径
-        filename: 'bundle.[hash:6].js',                                    // 打包后的文件名
+        filename: '[name].[hash:6].js',                                    // 打包后的文件名
         publicPath: '/'                                                    // 通常是CDN地址
     },
     /* 用于在浏览器实时查看效果 */
@@ -90,13 +93,22 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './public/index.html',                                // 指定的html文件
             filename: 'index.html',                                         // 打包后的文件名
-            // chunks: ['index'],                                           // 仅把数组中的js文件引入html文件中
+            chunks: ['index'],                                              // 仅把数组中的js文件引入html文件中
             config: config.template,                                        // 自定义设置的对象
             minify: {
                 removeAttributeQuotes: false,                               // 是否删除属性的双引号
                 collapseWhitespace: false,                                  // 是否折叠空白
             },
             // hash: true                                                   // 是否加上hash，默认是false
+        }),
+        new HtmlWebpackPlugin({
+            template: './public/login.html',
+            filename: 'login.html',
+            chunks: ['login'],
+            minify: {
+                removeAttributeQuotes: false,
+                collapseWhitespace: false,
+            },
         }),
         // 每次打包前清空dist目录
         new CleanWebpackPlugin({
