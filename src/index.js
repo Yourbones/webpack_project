@@ -1,4 +1,10 @@
 import './index.less';
+
+// 添加这段代码，避免了更改代码整个页面都刷新
+if(module && module.hot) {
+    module.hot.accept();
+}
+
 class Father {
     constructor(name) {
         this.name = name;
@@ -18,7 +24,7 @@ document.getElementsByTagName('button')[0].onclick = function() {
     import('../public/js/handle.js').then(fn => fn.default());
 }
 
-// 添加这段代码，避免了更改代码整个页面都刷新
-if(module && module.hot) {
-    module.hot.accept();
-}
+fetch("/api/user")
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
