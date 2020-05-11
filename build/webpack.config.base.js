@@ -8,6 +8,7 @@ const path = require('path');
 const Webpack = require('webpack');
 const isDev = process.env.NODE_ENV === 'development';
 const config = require('../public/config')[isDev ? 'dev' : 'build'];
+const apiMocker = require('mocker-api');
 
 module.exports = {
     /* 打包模式，不同模式采用了不同的内置优化 */
@@ -32,6 +33,9 @@ module.exports = {
         clientLogLevel: "silent",                                          // 设置日志等级
         compress: true,                                                    // 是否启动 gzip 压缩
         hot: true,                                                         // 是否开启热更新
+        before(app){
+            apiMocker(app, path.resolve('./mock/mocker.js'))
+        }
     },
     /* 开发工具配置 */
     devtool: 'cheap-module-eval-source-map',                               // 打包后的源码映射，对于通过控制台打印语句找到对应源码行数
