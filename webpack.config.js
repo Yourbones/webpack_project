@@ -132,6 +132,15 @@ module.exports = {
         // 压缩抽离出来单独打包的css文件
         new OptimizeCssPlugin(),
         // 热更新插件
-        new Webpack.HotModuleReplacementPlugin()
-    ]
+        new Webpack.HotModuleReplacementPlugin(),
+    ],
+    /* 配置 webpack 如何寻找模块所对应的文件
+       这样配置之后，我们 import Dialog from 'dialog'，
+       会去寻找 ./src/components/dialog，不再需要使用相对路径导入。
+       如果在 ./src/components 下找不到的话，就会到 node_modules 下寻找。
+    */
+    resolve: {
+        modules: ['./src/components', 'node_modules'],                   // 从左到右依次查找
+        alias: {},                                                       // 配置别名
+    }
 }
