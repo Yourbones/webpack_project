@@ -12,12 +12,13 @@ const config = require('../public/config')[isDev ? 'dev' : 'build'];
 module.exports = {
     /* 打包模式，不同模式采用了不同的内置优化 */
     mode: 'production',
+    context: path.resolve(__dirname, '../'),
     entry: {
         index: './src/index.js',
         login: './src/login.js'
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),                             // 必须是绝对路径
+        path: path.resolve(__dirname, '../dist'),                          // 必须是绝对路径
         filename: '[name].[hash:6].js',                                    // 打包后的文件名
         publicPath: '/'                                                    // 通常是CDN地址
     },
@@ -92,7 +93,7 @@ module.exports = {
     plugins: [
         // 自动将指定html文件一起打包，并将打包后的[hash].js文件自动插入指定的html中
         new HtmlWebpackPlugin({
-            template: './public/index.html',                                // 指定的html文件
+            template: './public/index.html',                               // 指定的html文件
             filename: 'index.html',                                         // 打包后的文件名
             chunks: ['index'],                                              // 仅把数组中的js文件引入html文件中
             config: config.template,                                        // 自定义设置的对象
@@ -119,7 +120,7 @@ module.exports = {
         new CopyWebpackPlugin([
             {
                 from: 'public/js/*.js',
-                to: path.resolve(__dirname, 'dist', 'js'),
+                to: path.resolve(__dirname, '../dist', 'js'),
                 flatten: true,                                               // flatten 这个参数，设置为 true，那么它只会拷贝文件，而不会把文件夹路径都拷贝上
             },
             // 还可以继续配置其它要拷贝的文件
