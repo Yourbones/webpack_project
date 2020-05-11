@@ -7,4 +7,14 @@ const path = require('path');
 module.exports = merge(baseWebpackConfig, {
     mode: 'development',
     // ...其他的配置
+    devServer: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:4000',
+                pathRewrite: {
+                    '/api': ''
+                }
+            }
+        }
+    }
 })
