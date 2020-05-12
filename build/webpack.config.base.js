@@ -44,7 +44,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js[x]?$/,
-                use: ['babel-loader'],
+                use: ['cache-loader', 'babel-loader'],
                 include: [path.resolve(__dirname, '../src')]
             },
             {
